@@ -1,0 +1,23 @@
+filebeat.inputs:
+  - type: filestream
+    id: default-filestream
+    enabled: true
+    paths:
+      - /usr/share/filebeat/ingest_data/*.log
+
+filebeat.config.modules:
+  path: ${path.config}/modules.d/*.yml
+  reload.enabled: false
+
+output.elasticsearch:
+  hosts: ${ELASTIC_HOSTS}
+  username: ${ELASTIC_USER}
+  password: ${ELASTIC_PASSWORD}
+  ssl:
+    certificate_authorities: "certs/ca/ca.crt"
+    certificate: "certs/es01/es01.crt"
+    key: "certs/es01/es01.key"
+
+processors:
+  - add_host_metadata: ~
+  - add_docker_metadata: ~
